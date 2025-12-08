@@ -29,7 +29,7 @@ Sistem, halı sahaların yönetimini ve müşteri rezervasyon süreçlerini diji
 ## 👥 Proje Ekibi
 Proje geliştirme süreci modüler olarak iş bölümüyle gerçekleştirilmiştir:
 * **Backend & Entities:** [Ali Tekin]
-* **Database Interface & Mock Data:** [Burak Kaharamanöz]
+* **Database Interface & Mock Data:** [Burak Kahramanöz]
 * **Business Logic & Validation:** [Alihan Toprak Arslan]
 * **Frontend (GUI) & Integration:** [Melih Can Sağ]
 
