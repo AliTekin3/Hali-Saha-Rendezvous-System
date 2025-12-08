@@ -1,6 +1,6 @@
 # ⚽ Halı Saha Randevu Sistemi (Turf Reservation System)
 
-Bu proje, **Yazılım İnşası (Software Construction)** dersi kapsamında; Nesne Yönelimli Programlama (OOP) prensipleri, temiz kod (Clean Code) standartları ve **Katmanlı Mimari (Layered Architecture)** kullanılarak geliştirilmiştir.
+Bu proje, **Yazılım İnşası (Software Construction)** dersi kapsamında; Nesne Yönelimli Programlama (OOP) prensipleri, temiz kod (Clean Code) standartları ve Katmanlı Mimari kullanılarak geliştirilmiştir.
 
 ## 🚀 Proje Hakkında
 Sistem, halı sahaların yönetimini ve müşteri rezervasyon süreçlerini dijitalleştirmek amacıyla tasarlanmıştır. Proje, kod karmaşasını önlemek ve sürdürülebilirliği artırmak adına 4 temel katmana ayrılmıştır:
@@ -28,10 +28,9 @@ Sistem, halı sahaların yönetimini ve müşteri rezervasyon süreçlerini diji
 
 ## 👥 Proje Ekibi
 Proje geliştirme süreci modüler olarak iş bölümüyle gerçekleştirilmiştir:
-* **Backend & Entities:** [Senin veya Arkadaşının Adı]
-* **Database Interface & Mock Data:** [Arkadaşının Adı]
-* **Business Logic & Validation:** [Arkadaşının Adı]
-* **Frontend (GUI) & Integration:** [Arkadaşının Adı]
+* **Backend & Entities:** [Ali Tekin]
+* **Database Interface & Mock Data:** [Burak Kaharamanöz]
+* **Business Logic & Validation:** [Alihan Toprak Arslan]
+* **Frontend (GUI) & Integration:** [Melih Can Sağ]
 
 ---
-Developed for Software Construction Course, 2025.
