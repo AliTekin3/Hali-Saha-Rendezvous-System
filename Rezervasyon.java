@@ -1,18 +1,25 @@
 public class Rezervasyon {
     private HaliSaha saha;
     private Musteri musteri;
-    private String saat;
+    private String tarihSaat;
 
-    public Rezervasyon(HaliSaha saha, Musteri musteri, String saat) {
+    public Rezervasyon(HaliSaha saha, Musteri musteri, String tarihSaat) {
         this.saha = saha;
         this.musteri = musteri;
-        this.saat = saat;
+        this.tarihSaat = tarihSaat;
     }
 
-    public HaliSaha getSaha() { return saha; }
-    public String getSaat() { return saat; }
+    public String getOzetBilgi() {
+        return "Müşteri: " + musteri.getAdSoyad() +
+                " | Saha: " + saha.getIsim() +
+                " | Tarih: " + tarihSaat;
+    }
 
-    public String getBilgi() {
-        return musteri.getAdSoyad() + " -> " + saha.getIsim() + " [" + saat + "]";
+    public HaliSaha getSaha() {
+        return saha;
+    }
+
+    public String getTarihSaat() {
+        return tarihSaat;
     }
 }
