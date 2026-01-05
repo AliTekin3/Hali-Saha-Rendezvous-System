@@ -1,105 +1,173 @@
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.text.*; 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class Uygulama extends JFrame {
 
-    // Arayüz Elemanları
     private JComboBox<HaliSaha> comboSahalar;
+    private JComboBox<String> comboSaatler;
     private JTextField txtAdSoyad;
-    private JTextField txtSaat;
-    private JTextArea txtSonuc;
-
-    // Backend Bağlantısı
+    private JTable tablo;
+    private DefaultTableModel tabloModeli;
+    private JButton btnSil;
     private RandevuSistemi sistem;
 
     public Uygulama() {
-        // --- 1. SİSTEMİ HAZIRLA ---
         sistem = new RandevuSistemi();
-        sistem.sahaEkle(new HaliSaha("Yıldız Arena", "Merkez", 1500.0));
-        sistem.sahaEkle(new HaliSaha("Kuzey Tesisleri", "Sanayi", 1200.0));
-        sistem.sahaEkle(new HaliSaha("Şampiyonlar Halı Saha", "Kampüs", 1350.0));
+        sistem.sahaEkle(new HaliSaha("Bostanbükü", "Merkez", 1500.0));
+        sistem.sahaEkle(new HaliSaha("Karşıyaka", "Sanayi", 1200.0));
+        sistem.sahaEkle(new HaliSaha("Kayalar", "Kampüs", 1350.0));
 
-        // --- 2. PENCERE AYARLARI ---
-        setTitle("Halı Saha Randevu Sistemi v1.0");
-        setSize(350, 400);
+        setTitle("Halı Saha Randevu Sistemi v2.3");
+        setSize(600, 550);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLayout(new FlowLayout(FlowLayout.CENTER, 10, 15)); // Biraz boşluklu dizilim
+        setLayout(new BorderLayout());
 
-        // --- 3. BİLEŞENLER ---
+        JPanel panelForm = new JPanel();
+        panelForm.setLayout(new GridLayout(4, 2, 10, 10));
+        panelForm.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        // Saha Seçimi
-        add(new JLabel("Halı Saha Seçiniz:"));
+        panelForm.add(new JLabel("Halı Saha Seçiniz:"));
         comboSahalar = new JComboBox<>();
-        // Sistemdeki sahaları kutuya dolduruyoruz
         for (HaliSaha saha : sistem.getSahalar()) {
             comboSahalar.addItem(saha);
         }
-        add(comboSahalar);
+        panelForm.add(comboSahalar);
 
-        // İsim Soyad
-        add(new JLabel("Müşteri Ad Soyad:"));
-        txtAdSoyad = new JTextField(20);
-        add(txtAdSoyad);
+        panelForm.add(new JLabel("Müşteri Ad Soyad:"));
+        txtAdSoyad = new JTextField();
 
-        // Tarih
-        add(new JLabel("Tarih ve Saat Giriniz:"));
-        txtSaat = new JTextField(20);
-        txtSaat.setText("03.12.2025 20:00"); // Örnek veri
-        add(txtSaat);
+        ((AbstractDocument) txtAdSoyad.getDocument()).setDocumentFilter(new DocumentFilter() {
+            private boolean harfKontrol(String text) {
+                return text.matches("[a-zA-ZçğıöşüÇĞİÖŞÜ\\s]+");
+            }
 
-        // Kaydet Butonu
-        JButton btnKaydet = new JButton("Randevuyu Oluştur");
-        btnKaydet.setBackground(Color.GREEN); // Yeşil buton
-        add(btnKaydet);
+            @Override
+            public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr) throws BadLocationException {
+                if (string != null && harfKontrol(string)) {
+                    super.insertString(fb, offset, string, attr);
+                }
+            }
 
-        // Sonuç Ekranı
-        txtSonuc = new JTextArea(8, 28);
-        txtSonuc.setEditable(false);
-        add(new JScrollPane(txtSonuc));
+            @Override
+            public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
+                if (text != null && harfKontrol(text)) {
+                    super.replace(fb, offset, length, text, attrs);
+                }
+            }
+        });
 
-        // --- 4. BUTON AKSİYONU ---
+        panelForm.add(txtAdSoyad);
+
+        panelForm.add(new JLabel("Randevu Saati:"));
+        String[] saatler = new String[24];
+        for (int i = 0; i < 24; i++) {
+            int baslangic = i;
+            int bitis = (i + 1) % 24;
+            saatler[i] = String.format("%02d:00 - %02d:00", baslangic, bitis);
+        }
+        comboSaatler = new JComboBox<>(saatler);
+        panelForm.add(comboSaatler);
+
+        JButton btnKaydet = new JButton("Randevu Ekle");
+        btnKaydet.setBackground(new Color(60, 179, 113));
+        btnKaydet.setForeground(Color.BLACK);
+        panelForm.add(new JLabel(""));
+        panelForm.add(btnKaydet);
+
+        add(panelForm, BorderLayout.NORTH);
+
+        String[] kolonlar = {"Saha Adı", "Müşteri", "Saat", "Ücret"};
+        tabloModeli = new DefaultTableModel(kolonlar, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        tablo = new JTable(tabloModeli);
+        tablo.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+        JScrollPane scrollPane = new JScrollPane(tablo);
+        add(scrollPane, BorderLayout.CENTER);
+
+        JPanel panelAlt = new JPanel();
+        btnSil = new JButton("Seçili Randevuyu İptal Et");
+        btnSil.setBackground(new Color(220, 53, 69));
+        btnSil.setForeground(Color.BLACK);
+        panelAlt.add(btnSil);
+
+        add(panelAlt, BorderLayout.SOUTH);
+
         btnKaydet.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String ad = txtAdSoyad.getText();
-                String tarih = txtSaat.getText();
+                String saat = (String) comboSaatler.getSelectedItem();
                 HaliSaha secilenSaha = (HaliSaha) comboSahalar.getSelectedItem();
 
-                if (ad.isEmpty() || tarih.isEmpty()) {
-                    JOptionPane.showMessageDialog(null, "Lütfen bilgileri eksiksiz girin!");
+                if (ad.isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "Lütfen isim giriniz!");
                     return;
                 }
 
-                // Müşteri nesnesi oluştur (ID şimdilik rastgele 1)
                 Musteri musteri = new Musteri(1, ad, "555-0000");
+                String tamTarih = "08.12.2025 " + saat;
 
-                // Sisteme kaydet
-                sistem.randevuOlustur(secilenSaha, musteri, tarih);
+                boolean sonuc = sistem.randevuOlustur(secilenSaha, musteri, tamTarih);
 
-                // Ekrana yaz
-                txtSonuc.append("✔ " + secilenSaha.getIsim() + "\n");
-                txtSonuc.append("👤 " + ad + "\n");
-                txtSonuc.append("🕒 " + tarih + "\n");
-                txtSonuc.append("-----------------------\n");
-
-                // Temizlik
-                txtAdSoyad.setText("");
+                if (sonuc) {
+                    Object[] satir = {
+                            secilenSaha.getIsim(),
+                            ad,
+                            saat,
+                            secilenSaha.getSaatlikUcret() + " TL"
+                    };
+                    tabloModeli.addRow(satir);
+                    txtAdSoyad.setText("");
+                } else {
+                    JOptionPane.showMessageDialog(null, "HATA: Bu saat dolu!", "Çakışma", JOptionPane.ERROR_MESSAGE);
+                }
             }
         });
 
-        setLocationRelativeTo(null); // Ekranın ortasında aç
+        btnSil.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int seciliSatir = tablo.getSelectedRow();
+
+                if (seciliSatir == -1) {
+                    JOptionPane.showMessageDialog(null, "Lütfen iptal etmek için listeden bir randevu seçin.");
+                    return;
+                }
+
+                String sahaAdi = (String) tabloModeli.getValueAt(seciliSatir, 0);
+                String saat = (String) tabloModeli.getValueAt(seciliSatir, 2);
+
+                String tamTarih = "08.12.2025 " + saat;
+
+                boolean silindiMi = sistem.randevuIptal(sahaAdi, tamTarih);
+
+                if (silindiMi) {
+                    tabloModeli.removeRow(seciliSatir);
+                    JOptionPane.showMessageDialog(null, "Randevu iptal edildi.");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Silme işlemi sırasında hata oluştu.");
+                }
+            }
+        });
+
+        setLocationRelativeTo(null);
         setVisible(true);
     }
 
     public static void main(String[] args) {
-        // Arayüzü güvenli modda başlatır
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                new Uygulama();
-            }
-        });
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception ignored) {}
+        SwingUtilities.invokeLater(() -> new Uygulama());
     }
 }
