@@ -15,11 +15,7 @@ public class Rezervasyon {
                 " | Tarih: " + tarihSaat;
     }
 
-    public HaliSaha getSaha() {
-        return saha;
-    }
-
-    public String getTarihSaat() {
-        return tarihSaat;
-    }
+    public HaliSaha getSaha() { return saha; }
+    public String getTarihSaat() { return tarihSaat; }
+    public String getSaat() { return tarihSaat; }
 }
