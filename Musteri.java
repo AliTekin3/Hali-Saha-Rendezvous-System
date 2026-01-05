@@ -1,11 +1,14 @@
-public class Musteri {
-    private String adSoyad;
-    private String telefon;
+// Kullanici sınıfından miras alarak (extends) kod tekrarını önlüyoruz.
+public class Musteri extends Kullanici {
 
-    public Musteri(String adSoyad, String telefon) {
-        this.adSoyad = adSoyad;
-        this.telefon = telefon;
+    // 1. Constructor: ID, AdSoyad ve Telefon alan (Uygulama.java'daki kullanım için)
+    public Musteri(int id, String adSoyad, String telefon) {
+        super(id, adSoyad, telefon);
     }
 
-    public String getAdSoyad() { return adSoyad; }
+    // 2. Constructor: Sadece AdSoyad ve Telefon alan (RandevuYonetimi.java'daki kullanım için)
+    public Musteri(String adSoyad, String telefon) {
+        super(0, adSoyad, telefon);
+    }
+
 }
