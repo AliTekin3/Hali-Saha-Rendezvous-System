@@ -18,9 +18,29 @@ public class RandevuSistemi {
         return sahalar;
     }
 
-    public void randevuOlustur(HaliSaha saha, Musteri musteri, String tarih) {
-        Rezervasyon yeniRezervasyon = new Rezervasyon(saha, musteri, tarih);
+    public boolean randevuOlustur(HaliSaha istenenSaha, Musteri musteri, String istenenTarih) {
+        for (Rezervasyon r : rezervasyonlar) {
+            if (r.getSaha().equals(istenenSaha) && r.getTarihSaat().equals(istenenTarih)) {
+                return false;
+            }
+        }
+        Rezervasyon yeniRezervasyon = new Rezervasyon(istenenSaha, musteri, istenenTarih);
         rezervasyonlar.add(yeniRezervasyon);
-        // İstersen burada veritabanına kayıt kodu da olur.
+        return true;
+    }
+
+    public boolean randevuIptal(String sahaAdi, String tarihSaat) {
+        Rezervasyon silinecek = null;
+        for (Rezervasyon r : rezervasyonlar) {
+            if (r.getSaha().getIsim().equals(sahaAdi) && r.getTarihSaat().equals(tarihSaat)) {
+                silinecek = r;
+                break;
+            }
+        }
+        if (silinecek != null) {
+            rezervasyonlar.remove(silinecek);
+            return true;
+        }
+        return false;
     }
 }
