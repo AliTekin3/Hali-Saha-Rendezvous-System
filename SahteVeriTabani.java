@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 import java.util.List;
 
-// Interface'i implemente eden sınıf (Verileri şimdilik listede tutuyoruz)
+//Interface'i implemente eden sınıf (Verileri şimdilik listede tutuyoruz)
 public class SahteVeriTabani implements IVeriTabani {
     private List<HaliSaha> sahalar = new ArrayList<>();
     private List<Rezervasyon> rezervasyonlar = new ArrayList<>();
